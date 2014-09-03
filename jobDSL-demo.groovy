@@ -29,7 +29,7 @@ def build = thr?.executable
 def envVarsMap = build.parent.builds[0].properties.get("envVars")
 def branch = envVarsMap.get('GIT_BRANCH').split('/')[1]
 
-for ( testcase in ['test_patchset_created', 'test_draft_published', 'test_ref_updated'] ) {
+for ( testcase in ['test_patchset_created', 'test_draft_published', 'test_ref_updated', 'test_change_merged'] ) {
     job {
         // Job name
         name(branch + '-unittest-' + testcase)
