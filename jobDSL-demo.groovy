@@ -1,6 +1,6 @@
-job {
+def template = job {
     // Job name
-    name('demo-1')
+    name('template')
     // Where to execute
     label('master')
     // Discrad old builds
@@ -21,13 +21,22 @@ job {
             failBuild()
         }
     }
-    // SCM configuration
-    scm {
-        // Git repository to checkout
-        git('git://github.com/sonyxperiadev/pygerrit.git')
-    }
-    // Build steps
-    steps {
-        shell('./unittests.py')
+}
+
+for ( testcase in ['test_patchset_created', 'test_draft_published', 'test_ref_updated'] ) {
+    job {
+        // Job name
+        name('demo-' + testcase)
+        // Settings from template
+        using('template')
+        // SCM configuration
+        scm {
+            // Git repository to checkout
+            git('git://github.com/sonyxperiadev/pygerrit.git')
+        }
+        // Build steps
+        steps {
+            shell('python unittests.py TestGerritEvents.' + testcase)
+        }
     }
 }
