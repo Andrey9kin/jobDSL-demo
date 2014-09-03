@@ -23,10 +23,16 @@ def template = job {
     }
 }
 
+// Get current branch name
+def thr = Thread.currentThread()
+def build = thr?.executable
+def envVarsMap = build.parent.builds[0].properties.get("envVars")
+def branch = envVarsMap.get('GIT_BRANCH').split('/')[1]
+
 for ( testcase in ['test_patchset_created', 'test_draft_published', 'test_ref_updated'] ) {
     job {
         // Job name
-        name('demo-' + testcase)
+        name(branch + '-unittest-' + testcase)
         // Settings from template
         using('template')
         // SCM configuration
